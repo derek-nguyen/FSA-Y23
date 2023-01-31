@@ -2,3 +2,19 @@
     text-transform: uppercase;
     /* list-style: none; */
 }
+
+main {
+    display: flex;
+}
+
+.items {
+    display: flex;
+    flex-flow: row wrap;
+
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
