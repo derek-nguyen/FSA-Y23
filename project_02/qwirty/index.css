@@ -1,20 +1,34 @@
-.categories {
-    text-transform: uppercase;
-    /* list-style: none; */
-}
-
 main {
     display: flex;
 }
 
-.items {
+.categories {
     display: flex;
-    flex-flow: row wrap;
+    flex-direction: column;
+}
 
+.categories > a {
+    text-decoration: none;
+    background: #44b;
+    color: white;
+    font-family: 'Dosis';
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 1em 0.5em;
+    padding: 1em;
+    width: 140px;
+    font-size: 13px;
+    
 }
 
 .item {
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+
+.items {
+    display: flex;
+    flex-flow: row wrap;
+
 }
