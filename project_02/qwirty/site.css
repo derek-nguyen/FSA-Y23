@@ -10,7 +10,7 @@
     justify-content: space-between;
     align-items: baseline;
     background-color: #44b;
-    padding: 0.5em;
+    padding: 0.5em 0;
 }
 
 .horizontal a {
@@ -28,10 +28,17 @@
     text-decoration: none;
 }
 
+.horizontal.nav-list a {
+    border-right: 1px solid #888;
+}
+
+.horizontal.nav-list li:last-of-type a {
+    border-right: none;
+}
+
 .sub-nav {
     display: flex;
     padding: 1rem 0;
-    /* align-items: center; */
 }
 
 .company-name {
@@ -74,8 +81,8 @@ footer {
     display: flex;
     justify-content: center;
     padding: 10px 0 10px 0;
-    background-color: rgb(165, 165, 165);
-    color: black;
+    background-color: #225;
+    color: white;
 }
 
 footer section {
@@ -86,14 +93,56 @@ footer section {
 
 }
 
-footer ul li {
-    list-style: none;
-}
-
 footer ul {
     padding: 0;
 }
 
+footer ul li {
+    list-style: none;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+.customer-care h2, .sales h2, .about-us h2 {
+    border-bottom: 1px white solid;
+    margin-bottom: 10px;
+}
+
+
 .material-icons-outlined {
     font-family: "Material Icons";
+    font-size: inherit;
+}
+
+/* Add media styling below */
+@media (max-width:768px) {
+    .main-nav {
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        padding: 0 0 .2em 0;
+    }
+
+    .main-nav > .full-width {
+        display: none;
+    }
+
+    #menu {
+        font-size: 24px;
+        margin-right: .3em;
+        color: white;
+    }
+
+    .ad {
+        font-size: 12px;
+    }
+}
+
+@media (min-width:768px) {
+    #menu {
+        display: none;
+    }
 }
