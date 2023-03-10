@@ -1,0 +1,34 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#startGame {
+    width: 20px;
+    height: 20px;
+}
+
+#gameBoard {
+    width: 600px;
+    height: 600px;
+    border: solid black 1px;
+    display: flex;
+    flex-wrap: wrap;
+    align-self: center;
+}
+
+.cell {
+    width: calc(100% / 20);
+    height: calc(100% / 20);
+    border: solid #639107 1px;
+    box-sizing: border-box;
+    background-color: #b6e062;
+}
+
+
+/* adding pseudo-class to select every other child class */
+.cell:nth-child(even){
+    background-color: #a2d14a;
+}
