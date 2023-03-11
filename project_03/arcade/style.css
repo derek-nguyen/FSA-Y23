@@ -6,8 +6,9 @@ body {
 }
 
 #startGame {
-    width: 20px;
+    width: 100px;
     height: 20px;
+    margin: 2vh;
 }
 
 #gameBoard {
@@ -27,8 +28,17 @@ body {
     background-color: #b6e062;
 }
 
-
 /* adding pseudo-class to select every other child class */
-.cell:nth-child(even){
+/* .cell:nth-child(even){
     background-color: #a2d14a;
+} */
+
+.snakeShape {
+    background-color: blue;
+    border: blue;
+}
+
+.apple {
+    background-color: red;
+    border: red;
 }
