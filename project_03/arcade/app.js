@@ -1,6 +1,7 @@
 const snake = {
-    body: [[10, 5], [10, 6], [10, 7]],
-    head: [10, 8]
+    //tail is the highest index
+    body: [[10, 4], [10, 3], [10, 2]],
+    head: [10, 5]
 }
 
 const gameState = {
@@ -8,6 +9,7 @@ const gameState = {
         defaultRow: 20,
         defaultColumn: 20,
     },
+    apple: [10, 10],
     snake: snake,
 }
 
@@ -23,7 +25,7 @@ let highScore = 0
 
 // initializes a new game, when the start game button is clicked
 document.getElementById('startGame').addEventListener('click', () => {
-    initGame()
+    // initGame()
 });
 
 function initGame() {
@@ -41,8 +43,14 @@ function initGame() {
         cells.push(row)
     }
 
+    // renders the initial apple
+    let appleRow = gameState.apple[0]
+    let appleCol = gameState.apple[1]
+    cells[appleRow][appleCol].classList.add('apple')
+
     renderSnake();
 }
+
 // REMOVE: at the end of testing
 initGame()
 
@@ -67,35 +75,44 @@ function removeSnake() {
         const cell = cells[row][col]
         cell.classList.remove('snakeShape')
     }
-}
 
+    const [row, col] = snake.head
+    const cellHead = cells[row][col]
+    cellHead.classList.remove('snakeShape')
+}
 
 document.addEventListener('keydown', (event) => {
     removeSnake()
+    let newHead;
     if (event.key === 'ArrowLeft') {
         //need to change existing positions of snake.body and add [x,y-1]
-        snake.body = snake.body.map(([row, col]) => [row, col - 1])
+        // snake.head = snake.head.map(([row, col]) => [row, col - 1])
+        newHead = [snake.head[0], snake.head[1] - 1]
+
     }
     else if (event.key === 'ArrowUp') {
         //need to change existing positions of snake.body and add [x-1,y]
-        snake.body = snake.body.map(([row, col]) => [row - 1, col])
+        // snake.head = snake.head.map(([row, col]) => [row - 1, col])
+        newHead = [snake.head[0] - 1, snake.head[1]]
     }
     else if (event.key === 'ArrowRight') {
         //need to change existing positions of snake.body and add [x,y+1]
-        snake.body = snake.body.map(([row, col]) => [row, col + 1])
+        // snake.head = snake.head.map(([row, col]) => [row, col + 1])
+        newHead = [snake.head[0], snake.head[1] + 1];
     }
     else if (event.key === 'ArrowDown') {
         //need to change existing positions of snake.body and add [x+1,y]
-        snake.body = snake.body.map(([row, col]) => [row + 1, col])
+        // snake.head = snake.head.map(([row, col]) => [row + 1, col])
+        newHead = [snake.head[0] + 1, snake.head[1]];
     }
+
+    snake.body.unshift(snake.head)
+    snake.body.pop()
+
+    snake.head = newHead
     renderSnake()
 });
 
-
-// changes direction of the snake when an arrow key is clicked
-// function changeDirection(event) {
-//     console.log(event)
-// }
 
 // render an apple at a random position on the board
 function randomPosApple() {
@@ -108,7 +125,10 @@ function randomPosApple() {
 
 // Snake will grow in length when an apple is eaten
 function eatAppleAndGrow() {
+    // check if the snake head is on the same cell as the apple
 
+    // if they're the same then a new head should be created
+    // apple should be removed and a new apple should appear on the board
 }
 
 // Game will end if the snake hits itself or hits the wall
