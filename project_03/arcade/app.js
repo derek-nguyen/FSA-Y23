@@ -111,6 +111,7 @@ document.addEventListener('keydown', (event) => {
 
     snake.head = newHead
     renderSnake()
+    eatAppleAndGrow()
 });
 
 
@@ -126,14 +127,20 @@ function randomPosApple() {
 // Snake will grow in length when an apple is eaten
 function eatAppleAndGrow() {
     // check if the snake head is on the same cell as the apple
+    // check to see if the current position of the snake head has 'apple' in class .contains()
+    if (cells[snake.head[0]][snake.head[1]].classList.contains('apple') === true) {
+        //add the current position of the apple to the tail of the snake
+        snake.body.push([snake.head[0],snake.head[1]])
+        
+        //remove "eat" apple from board
+        cells[snake.head[0]][snake.head[1]].classList.remove('apple')
 
-    // if they're the same then a new head should be created
-    // apple should be removed and a new apple should appear on the board
+        //creates a new apple
+        randomPosApple()
+    }
 }
 
 // Game will end if the snake hits itself or hits the wall
 function endGame() {
 
 }
-
-
