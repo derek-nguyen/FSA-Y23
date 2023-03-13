@@ -25,7 +25,7 @@ let highScore = 0
 
 // initializes a new game, when the start game button is clicked
 document.getElementById('startGame').addEventListener('click', () => {
-    // initGame()
+    initGame()
 });
 
 function initGame() {
@@ -49,13 +49,44 @@ function initGame() {
     cells[appleRow][appleCol].classList.add('apple')
 
     renderSnake();
+
+    // setInterval(() => {
+    //     endGame();
+    //     moveSnake();
+    // }, 100)
 }
 
+
 // REMOVE: at the end of testing
-initGame()
+
+function moveSnake() {
+    removeSnake()
+    let newHead;
+
+    if (previousDirection === 'left') {
+        newHead = [snake.head[0], snake.head[1] - 1]
+    } else if (previousDirection === 'up') {
+        newHead = [snake.head[0] - 1, snake.head[1]]
+    } else if (previousDirection === 'right') {
+        newHead = [snake.head[0], snake.head[1] + 1];
+    } else if (previousDirection === 'down') {
+        newHead = [snake.head[0] + 1, snake.head[1]];
+    } else {
+        return;
+    }
+
+    snake.body.unshift(snake.head)
+    snake.body.pop()
+    snake.head = newHead
+
+
+    renderSnake()
+    eatAppleAndGrow()
+}
+
 
 function renderSnake() {
-    // render snake on board based on snake object
+    // render snake o   n board based on snake object
     // add class snakeShape to the body
     for (let i = 0; i < snake.body.length; i++) {
         const [row, col] = snake.body[i]; //using array destructuring 
@@ -76,42 +107,52 @@ function removeSnake() {
         cell.classList.remove('snakeShape')
     }
 
+    // removes snake's head
     const [row, col] = snake.head
     const cellHead = cells[row][col]
     cellHead.classList.remove('snakeShape')
 }
 
+let previousDirection = 'right'
 document.addEventListener('keydown', (event) => {
-    removeSnake()
     let newHead;
-    if (event.key === 'ArrowLeft') {
+    if (event.key === 'ArrowLeft' && previousDirection !== 'right') {
         //need to change existing positions of snake.body and add [x,y-1]
-        // snake.head = snake.head.map(([row, col]) => [row, col - 1])
+        previousDirection = 'left'
         newHead = [snake.head[0], snake.head[1] - 1]
+        removeSnake()
 
     }
-    else if (event.key === 'ArrowUp') {
+    else if (event.key === 'ArrowUp' && previousDirection !== 'down') {
         //need to change existing positions of snake.body and add [x-1,y]
-        // snake.head = snake.head.map(([row, col]) => [row - 1, col])
+        previousDirection = 'up'
         newHead = [snake.head[0] - 1, snake.head[1]]
+        removeSnake()
     }
-    else if (event.key === 'ArrowRight') {
+    else if (event.key === 'ArrowRight' && previousDirection !== 'left') {
         //need to change existing positions of snake.body and add [x,y+1]
-        // snake.head = snake.head.map(([row, col]) => [row, col + 1])
+        previousDirection = 'right'
         newHead = [snake.head[0], snake.head[1] + 1];
+        removeSnake()
     }
-    else if (event.key === 'ArrowDown') {
+    else if (event.key === 'ArrowDown' && previousDirection !== 'up') {
         //need to change existing positions of snake.body and add [x+1,y]
-        // snake.head = snake.head.map(([row, col]) => [row + 1, col])
+        previousDirection = 'down'
         newHead = [snake.head[0] + 1, snake.head[1]];
+        removeSnake()
     }
+    else {
+        return;
+    }
+
 
     snake.body.unshift(snake.head)
     snake.body.pop()
-
     snake.head = newHead
+    endGame()
     renderSnake()
     eatAppleAndGrow()
+
 });
 
 
@@ -130,8 +171,8 @@ function eatAppleAndGrow() {
     // check to see if the current position of the snake head has 'apple' in class .contains()
     if (cells[snake.head[0]][snake.head[1]].classList.contains('apple') === true) {
         //add the current position of the apple to the tail of the snake
-        snake.body.push([snake.head[0],snake.head[1]])
-        
+        snake.body.push([snake.head[0], snake.head[1]])
+
         //remove "eat" apple from board
         cells[snake.head[0]][snake.head[1]].classList.remove('apple')
 
@@ -140,7 +181,46 @@ function eatAppleAndGrow() {
     }
 }
 
+let gameOver = false
 // Game will end if the snake hits itself or hits the wall
 function endGame() {
+    // checks to see if snake is in body
+    for (let i = 0; i < snake.body.length - 1; i++) {
+        if (JSON.stringify(snake.body[i]).includes(JSON.stringify(snake.head))) {
+            alert('GAME OVER')
+            gameOver = true
+        }
+    }
 
+    // checks if snake hits a wall
+    const [snakeRow, snakeCol] = snake.head
+    if (snakeRow < 0 || snakeRow >= rows || snakeCol < 0 || snakeCol >= cols) {
+        alert('GAME OVER')
+        gameOver = true
+    }
+}
+
+function resetGame() {
+    const oldBoard = document.getElementById('gameBoard')
+    oldBoard.remove()
+    
+    // Reset game state
+    gameState.apple = [10, 10]
+    gameState.snake = {
+        body: [[10, 4], [10, 3], [10, 2]],
+        head: [10, 5]
+    }
+    score = 0
+    previousDirection = 'right'
+
+    // Reset board
+    // for (let i = 0; i < rows; i++) {
+    //     for (let j = 0; j < cols; j++) {
+    //         const cell = cells[i][j]
+    //         cell.classList.remove('snakeShape', 'apple')
+    //     }
+    // }
+
+    initGame()
+    renderSnake()
 }
