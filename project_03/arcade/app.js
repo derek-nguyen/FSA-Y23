@@ -25,12 +25,13 @@ let highScore = 0
 // initializes a new game, when the start game button is clicked
 document.getElementById('startGame').addEventListener('click', () => {
     resetGame()
+    loadBoard()
     initGame()
 });
 
-initGame() 
+window.addEventListener('load',loadBoard())
 
-function initGame() {
+function loadBoard(){
     let board
     board = gameContainer.appendChild(document.createElement('div'))
     board.setAttribute('id', 'gameBoard')
@@ -45,7 +46,9 @@ function initGame() {
         }
         cells.push(row)
     }
+}
 
+function initGame() {
     // renders the initial apple
     let appleRow = gameState.apple[0]
     let appleCol = gameState.apple[1]
