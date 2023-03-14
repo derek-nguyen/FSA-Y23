@@ -28,7 +28,7 @@ document.getElementById('startGame').addEventListener('click', () => {
     initGame()
 });
 
-initGame() //REMOVE ONCE DONE TESTING
+initGame() 
 
 function initGame() {
     let board
@@ -63,9 +63,6 @@ function initGame() {
         }
     }, 100)
 }
-
-
-// REMOVE: at the end of testing
 
 function moveSnake() {
     removeSnake()
@@ -127,39 +124,23 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft' && previousDirection !== 'right') {
         //need to change existing positions of snake.body and add [x,y-1]
         previousDirection = 'left'
-        // newHead = [snake.head[0], snake.head[1] - 1]
-        // removeSnake()
 
     }
     else if (event.key === 'ArrowUp' && previousDirection !== 'down') {
         //need to change existing positions of snake.body and add [x-1,y]
         previousDirection = 'up'
-        // newHead = [snake.head[0] - 1, snake.head[1]]
-        // removeSnake()
     }
     else if (event.key === 'ArrowRight' && previousDirection !== 'left') {
         //need to change existing positions of snake.body and add [x,y+1]
         previousDirection = 'right'
-        // newHead = [snake.head[0], snake.head[1] + 1];
-        // removeSnake()
     }
     else if (event.key === 'ArrowDown' && previousDirection !== 'up') {
         //need to change existing positions of snake.body and add [x+1,y]
         previousDirection = 'down'
-        // newHead = [snake.head[0] + 1, snake.head[1]];
-        // removeSnake()
     }
     else {
         return;
     }
-
-
-    // snake.body.unshift(snake.head)
-    // snake.body.pop()
-    // snake.head = newHead
-    // endGame()
-    // renderSnake()
-    // eatAppleAndGrow()
 
 });
 
@@ -196,7 +177,6 @@ function endGame() {
     // checks to see if snake is in body
     for (let i = 0; i < snake.body.length - 1; i++) {
         if (JSON.stringify(snake.body[i]).includes(JSON.stringify(snake.head))) {
-            // alert('GAME OVER')
             gameOver = true
         }
     }
@@ -204,7 +184,6 @@ function endGame() {
     // checks if snake hits a wall
     const [snakeRow, snakeCol] = snake.head
     if (snakeRow < 0 || snakeRow >= rows || snakeCol < 0 || snakeCol >= cols) {
-        // alert('GAME OVER')
         gameOver = true
     }
 
@@ -246,9 +225,7 @@ function keepScore() {
     let currentScore = document.getElementById('current-score')
     let highScoreDOM = document.getElementById('high-score')
     currentScore.innerHTML = score
-    // highScoreDOM.innerHTML = highScore
 
-    // let hiScore = document.getElementById('high-score')
     if (score > highScore) {
         highScore = score
         highScoreDOM.innerHTML = highScore
