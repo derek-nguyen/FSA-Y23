@@ -10,25 +10,28 @@ const gameState = {
         defaultColumn: 20,
     },
     apple: [10, 10],
-    snake: snake,
+    // snake: snake,
 }
 
 // game state
 const gameContainer = document.querySelector('body')
-let board
 const rows = gameState.boardSize.defaultRow
 const cols = gameState.boardSize.defaultColumn
-const cells = []
+let cells = []
 let score = 0
 let highScore = 0
 
 
 // initializes a new game, when the start game button is clicked
 document.getElementById('startGame').addEventListener('click', () => {
+    resetGame()
     initGame()
 });
 
+initGame() //REMOVE ONCE DONE TESTING
+
 function initGame() {
+    let board
     board = gameContainer.appendChild(document.createElement('div'))
     board.setAttribute('id', 'gameBoard')
     for (let i = 0; i < rows; i++) {
@@ -50,10 +53,15 @@ function initGame() {
 
     renderSnake();
 
-    // setInterval(() => {
-    //     endGame();
-    //     moveSnake();
-    // }, 100)
+    const intervalId = setInterval(() => {
+        if (gameOver !== true) {
+            endGame();
+            moveSnake();
+            keepScore();
+        } else {
+            clearInterval(intervalId) 
+        }
+    }, 100)
 }
 
 
@@ -119,39 +127,39 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft' && previousDirection !== 'right') {
         //need to change existing positions of snake.body and add [x,y-1]
         previousDirection = 'left'
-        newHead = [snake.head[0], snake.head[1] - 1]
-        removeSnake()
+        // newHead = [snake.head[0], snake.head[1] - 1]
+        // removeSnake()
 
     }
     else if (event.key === 'ArrowUp' && previousDirection !== 'down') {
         //need to change existing positions of snake.body and add [x-1,y]
         previousDirection = 'up'
-        newHead = [snake.head[0] - 1, snake.head[1]]
-        removeSnake()
+        // newHead = [snake.head[0] - 1, snake.head[1]]
+        // removeSnake()
     }
     else if (event.key === 'ArrowRight' && previousDirection !== 'left') {
         //need to change existing positions of snake.body and add [x,y+1]
         previousDirection = 'right'
-        newHead = [snake.head[0], snake.head[1] + 1];
-        removeSnake()
+        // newHead = [snake.head[0], snake.head[1] + 1];
+        // removeSnake()
     }
     else if (event.key === 'ArrowDown' && previousDirection !== 'up') {
         //need to change existing positions of snake.body and add [x+1,y]
         previousDirection = 'down'
-        newHead = [snake.head[0] + 1, snake.head[1]];
-        removeSnake()
+        // newHead = [snake.head[0] + 1, snake.head[1]];
+        // removeSnake()
     }
     else {
         return;
     }
 
 
-    snake.body.unshift(snake.head)
-    snake.body.pop()
-    snake.head = newHead
-    endGame()
-    renderSnake()
-    eatAppleAndGrow()
+    // snake.body.unshift(snake.head)
+    // snake.body.pop()
+    // snake.head = newHead
+    // endGame()
+    // renderSnake()
+    // eatAppleAndGrow()
 
 });
 
@@ -172,6 +180,7 @@ function eatAppleAndGrow() {
     if (cells[snake.head[0]][snake.head[1]].classList.contains('apple') === true) {
         //add the current position of the apple to the tail of the snake
         snake.body.push([snake.head[0], snake.head[1]])
+        score += 1;
 
         //remove "eat" apple from board
         cells[snake.head[0]][snake.head[1]].classList.remove('apple')
@@ -187,7 +196,7 @@ function endGame() {
     // checks to see if snake is in body
     for (let i = 0; i < snake.body.length - 1; i++) {
         if (JSON.stringify(snake.body[i]).includes(JSON.stringify(snake.head))) {
-            alert('GAME OVER')
+            // alert('GAME OVER')
             gameOver = true
         }
     }
@@ -195,32 +204,61 @@ function endGame() {
     // checks if snake hits a wall
     const [snakeRow, snakeCol] = snake.head
     if (snakeRow < 0 || snakeRow >= rows || snakeCol < 0 || snakeCol >= cols) {
-        alert('GAME OVER')
+        // alert('GAME OVER')
         gameOver = true
     }
+
+    if (gameOver) {
+        modal.style.display = "block"
+    }
+    
 }
 
 function resetGame() {
     const oldBoard = document.getElementById('gameBoard')
     oldBoard.remove()
-    
-    // Reset game state
-    gameState.apple = [10, 10]
-    gameState.snake = {
-        body: [[10, 4], [10, 3], [10, 2]],
-        head: [10, 5]
-    }
-    score = 0
-    previousDirection = 'right'
 
     // Reset board
-    // for (let i = 0; i < rows; i++) {
-    //     for (let j = 0; j < cols; j++) {
-    //         const cell = cells[i][j]
-    //         cell.classList.remove('snakeShape', 'apple')
-    //     }
-    // }
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            const cell = cells[i][j]
+            cell.classList.remove('snakeShape', 'apple')
+        }
+    }
 
-    initGame()
-    renderSnake()
+    // Reset game state
+    gameState.apple = [10, 10]
+    snake.body = [[10, 4], [10, 3], [10, 2]]
+    snake.head = [10, 5]
+
+    gameOver = false;
+    score = 0
+    previousDirection = 'right'
+    cells = []
+    score = 0
+
+    //reset score on board
+    let currentScore = document.getElementById('current-score')
+    currentScore.innerHTML = score
 }
+
+function keepScore() {
+    let currentScore = document.getElementById('current-score')
+    let highScoreDOM = document.getElementById('high-score')
+    currentScore.innerHTML = score
+    // highScoreDOM.innerHTML = highScore
+
+    // let hiScore = document.getElementById('high-score')
+    if (score > highScore) {
+        highScore = score
+        highScoreDOM.innerHTML = highScore
+    }
+}
+
+// END GAME MODAL
+let modal = document.querySelector('.modal')
+let modalBtn = document.querySelector('.close')
+
+modalBtn.addEventListener('click',()=>{
+  modal.style.display = "none"  
+})
